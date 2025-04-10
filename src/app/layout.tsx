@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import ThemeRegistry from "@/styles/ThemeRegistry";
-import Layout from "@/components/Layout";
+import Layout from "@/layout/Layout";
 
 export const metadata: Metadata = {
     title: "Create Next App",
