@@ -32,6 +32,10 @@ const ProjectList = () => {
   const fetchProjects = useProjectStore((state) => state.fetchProjects);
   const addFavorite = useProjectStore((state) => state.addFavorite);
   const removeFavorite = useProjectStore((state) => state.removeFavorite);
+  const addFavoriteError = useProjectStore((state) => state.addFavoriteError);
+  const removeFavoriteError = useProjectStore((state) => state.removeFavoriteError);
+  const resetAddFavoriteError = useProjectStore((state) => state.resetAddFavoriteError);
+  const resetRemoveFavoriteError = useProjectStore((state) => state.resetRemoveFavoriteError);
   const resetProjectsError = useProjectStore((state) => state.resetProjectsError);
 
   const projects = useMemo(() => {
@@ -50,7 +54,15 @@ const ProjectList = () => {
       setSnackbarMessage(error);
       setSnackbarOpen(true);
     }
-  }, [error]);
+    if (addFavoriteError) {
+      setSnackbarMessage(addFavoriteError);
+      setSnackbarOpen(true);
+    }
+    if (removeFavoriteError) {
+      setSnackbarMessage(removeFavoriteError);
+      setSnackbarOpen(true);
+    }
+  }, [error, addFavoriteError, removeFavoriteError]);
 
   const handleCloseSnackbar = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -58,6 +70,8 @@ const ProjectList = () => {
     }
     setSnackbarOpen(false);
     resetProjectsError();
+    resetAddFavoriteError();
+    resetRemoveFavoriteError();
   };
 
   const handleToggleFavorite = (projectId: string, isCurrentlyFavorite: boolean) => {

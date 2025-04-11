@@ -33,7 +33,6 @@
       const fetchProjects = useProjectStore((state) => state.fetchProjects);
       const resetFavoritesError = useProjectStore((state) => state.resetFavoritesError);
       const favoritesError = useProjectStore((state) => state.favoritesError);
-    //   const favoritesLoading = useProjectStore((state) => state.favoritesLoading);
 
       const [snackbarOpen, setSnackbarOpen] = useState(false);
 

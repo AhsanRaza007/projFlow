@@ -35,8 +35,7 @@ export const createFavoriteSlice: StateCreator<
     try {
       const response = await fetch('/api/favorites');
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch favorites');
+        throw new Error('Failed to fetch favorites');
       }
       const data: string[] = await response.json();
       set({ favorites: data });
@@ -55,13 +54,12 @@ export const createFavoriteSlice: StateCreator<
         method: 'POST',
       });
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to add to favorites');
+        throw new Error('Failed to add to favorites');
       }
       set((state) => ({ favorites: [...state.favorites, id] }));
     } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An error occurred while adding to favorites';
+      console.log(err);
+      const errorMessage = 'An error occurred while adding to favorites';
       set({ addFavoriteError: errorMessage });
     } finally {
       set({ addFavoriteLoading: false });
@@ -74,13 +72,12 @@ export const createFavoriteSlice: StateCreator<
         method: 'DELETE',
       });
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to remove from favorites');
+        throw new Error('Failed to remove from favorites');
       }
       set((state) => ({ favorites: state.favorites.filter((favId: string) => favId !== id) }));
     } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'An error occurred while removing from favorites';
+      console.log(err);
+      const errorMessage = 'An error occurred while removing from favorites';
       set({ removeFavoriteError: errorMessage });
     } finally {
       set({ removeFavoriteLoading: false });
