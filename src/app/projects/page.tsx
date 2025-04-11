@@ -43,7 +43,7 @@ const ProjectList = () => {
                 <Button
                     variant="contained"
                     size={isMobile ? "small" : "medium"}
-                    onClick={() => router.push("/projects/create")}
+                    onClick={() => router.push("/projects/new")}
                 >
                     Create New Project
                 </Button>

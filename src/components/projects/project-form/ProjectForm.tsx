@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Box, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { Project, ProjectCreate, ProjectUpdate } from "@/types/projects";
@@ -11,40 +11,24 @@ import DatePickerWithTooltip from "@/components/forms/FormDatePickerWithTooltip"
 const ProjectForm: React.FC<{
     project?: Project;
     onSubmit: (projectData: ProjectCreate | ProjectUpdate) => Promise<void>;
+    onBackBtnClick?: () => void;
     submitButtonText: string;
-}> = ({ project, onSubmit, submitButtonText }) => {
+}> = ({ project, onSubmit, submitButtonText, onBackBtnClick }) => {
     const {
-        handleSubmit,
         control,
-        reset,
-        formState: { isValid },
+        formState: { isValid, isDirty, isSubmitting },
+        handleSubmit,
         getValues,
     } = useForm<ProjectCreate | ProjectUpdate>({
-        defaultValues: project
-            ? {
-                  name: project.name,
-                  description: project.description,
-                  startDate: project.startDate,
-                  endDate: project.endDate,
-                  projectManager: project.projectManager,
-              }
-            : {},
+        defaultValues: {
+            name: project?.name ?? "",
+            description: project?.description ?? "",
+            startDate: project?.startDate ?? "",
+            endDate: project?.endDate ?? "",
+            projectManager: project?.projectManager ?? "",
+        },
         mode: "onChange",
     });
-
-    useEffect(() => {
-        if (project) {
-            reset({
-                name: project.name,
-                description: project.description,
-                startDate: project.startDate,
-                endDate: project.endDate,
-                projectManager: project.projectManager,
-            });
-        } else {
-            reset();
-        }
-    }, [project, reset]);
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -66,7 +50,6 @@ const ProjectForm: React.FC<{
                             name="startDate"
                             rules={{ required: "Start Date is required" }}
                             label="Start Date"
-            
                         />
                     </Grid>
                     <Grid size={{ md: 6, xs: 12 }}>
@@ -84,7 +67,6 @@ const ProjectForm: React.FC<{
                                 },
                             }}
                             label="End Date"
-                     
                         />
                     </Grid>
                 </Grid>
@@ -97,9 +79,16 @@ const ProjectForm: React.FC<{
                 />
 
                 <Box mt={3}>
-                    <Button variant="contained" color="primary" type="submit" disabled={!isValid}>
-                        {submitButtonText}
+                    <Button variant="contained" color="primary" type="submit" disabled={!isValid || !isDirty || isSubmitting }>
+                        {isSubmitting ? 'submitting...' : submitButtonText}
                     </Button>
+                    {
+                        onBackBtnClick && (
+                            <Button variant="outlined" color="secondary" onClick={onBackBtnClick} sx={{ marginLeft: 2 }}>
+                                Back
+                            </Button>
+                        )
+                    }
                 </Box>
             </Box>
         </LocalizationProvider>

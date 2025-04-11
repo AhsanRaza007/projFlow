@@ -31,7 +31,7 @@ const ProjectEditPage = () => {
         try {
             if (projectDetails) {
                 await editProject(projectDetails.id, projectData);
-                router.push(`/projects/${id}`); // Navigate back to details page
+                router.push(`/projects/${id}`);
             }
         } catch (err: unknown) {
             // Handle error (e.g., display error message)
@@ -44,6 +44,11 @@ const ProjectEditPage = () => {
             }
         }
     };
+
+    const handleBackBtnClick = () => {
+        router.push(`/projects/${id}`);
+    };
+
 
     if (loading) {
         return (
@@ -70,7 +75,7 @@ const ProjectEditPage = () => {
             <Typography variant="h4">Edit Project</Typography>
             {projectDetails && (
                 <Box marginTop={4}>
-                    <ProjectForm project={projectDetails} onSubmit={handleSubmit} submitButtonText="Update Project" />
+                    <ProjectForm project={projectDetails} onSubmit={handleSubmit} onBackBtnClick={handleBackBtnClick} submitButtonText="Update Project" />
                 </Box>
             )}
             {submittingError && (

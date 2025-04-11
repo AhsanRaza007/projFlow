@@ -20,7 +20,6 @@ function FormTextFieldWithTooltip<T extends FieldValues>({ name, control, label,
     const touched = touchedFields[name as keyof typeof touchedFields];
     const dirty = dirtyFields[name as keyof typeof dirtyFields];
     const success = touched && dirty && !error;
-    console.log("success", success, name);
     return (
         <Controller
             name={name as Path<T>}
@@ -33,7 +32,6 @@ function FormTextFieldWithTooltip<T extends FieldValues>({ name, control, label,
                         label={label}
                         {...field}
                         error={error}
-                        onBlur={field.onBlur}
                         variant="outlined"
                         multiline={multiline ? true : false}
                         rows={multiline ? multiline : 1}
