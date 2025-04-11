@@ -13,10 +13,6 @@ const ProjectCreatePage = () => {
   const [submittingError, setSubmittingError] = useState<string | null>(null);
 
   const handleSubmit = async (projectData: ProjectCreate) => {
-    if ('name' in projectData && projectData.name === undefined) {
-      setSubmittingError('Project name is required.');
-      return;
-    }
     try {
       await addProject(projectData);
       router.push('/projects');
