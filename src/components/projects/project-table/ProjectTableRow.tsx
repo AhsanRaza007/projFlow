@@ -8,7 +8,7 @@ import { ClickableTableRow } from '@/styles/table';
 
 type ProjectTableRowProps = {
   project: Project;
-  toggleFavorite: (id: string) => void;
+  toggleFavorite: (id: string, isFav: boolean) => void;
 };
 const ProjectTableRow: React.FC<ProjectTableRowProps> = ({ project, toggleFavorite }) => {
   const router = useRouter();
@@ -28,7 +28,7 @@ const ProjectTableRow: React.FC<ProjectTableRowProps> = ({ project, toggleFavori
         <IconButton
           onClick={(e) => {
             e.stopPropagation();
-            toggleFavorite(project.id);
+            toggleFavorite(project.id, project.favorite);
           }}
         >
           {project.favorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}

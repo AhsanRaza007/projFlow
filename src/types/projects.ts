@@ -17,9 +17,9 @@ export interface ProjectCreate {
 }
 
 export interface ProjectUpdate {
-  name?: string;
-  description?: string;
-  startDate?: string;
-  endDate?: string;
-  projectManager?: string;
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  projectManager: string;
 }

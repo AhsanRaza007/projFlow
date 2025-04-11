@@ -5,36 +5,35 @@ import { useRouter, useParams } from 'next/navigation';
 import { Typography, Box, CircularProgress } from '@mui/material';
 import useProjectStore from '@/stores/projects.store';
 import { Project, ProjectUpdate } from '@/types/projects';
-import ProjectForm from '@/components/projects/project-form/ProjectForm'; // Reusable form component
+import ProjectForm from '@/components/projects/project-form/ProjectForm';
 
 const ProjectEditPage = () => {
   const router = useRouter();
   const { id } = useParams<{ id: string }>();
-  const { projects, editProject, fetchProjects, loading, error } = useProjectStore();
+  const { getProjectById, updateProject, loading, error } = useProjectStore(); 
   const [projectDetails, setProjectDetails] = useState<Project | null>(null);
   const [submittingError, setSubmittingError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!projects || projects.length === 0) {
-      fetchProjects();
-    }
-  }, [fetchProjects, projects]);
-
-  useEffect(() => {
-    if (projects) {
-      const currentProject = projects.find((proj) => proj.id === id);
-      setProjectDetails(currentProject || null);
-    }
-  }, [projects, id]);
+    const fetchProjectDetail = async () => {
+      if (id) {
+        const project = await getProjectById(id);
+        setProjectDetails(project || null);
+      }
+    };
+    fetchProjectDetail();
+  }, [id, getProjectById]);
 
   const handleSubmit = async (projectData: ProjectUpdate) => {
+    setSubmittingError(null);
     try {
-      if (projectDetails) {
-        await editProject(projectDetails.id, projectData);
-        router.push(`/projects/${id}`);
+      if (projectDetails?.id) {
+        await updateProject(projectDetails.id, projectData);
+        router.push(`/projects/${projectDetails.id}`);
+      } else {
+        setSubmittingError('Project ID not found.');
       }
     } catch (err: unknown) {
-      // Handle error (e.g., display error message)
       if (err instanceof Error) {
         setSubmittingError(err.message);
         console.error(err.message);
@@ -61,12 +60,8 @@ const ProjectEditPage = () => {
     return <Typography color="error">{error}</Typography>;
   }
 
-  if (!projects) {
-    return <Typography>Loading projects...</Typography>;
-  }
-
   if (!projectDetails) {
-    return <Typography>Project not found</Typography>;
+    return <Typography>Loading project details...</Typography>;
   }
 
   return (

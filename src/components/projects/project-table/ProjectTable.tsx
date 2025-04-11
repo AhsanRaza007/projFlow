@@ -6,7 +6,7 @@ import { Project } from '@/types/projects';
 
 type ProjectTableProps = {
   projects: Project[];
-  toggleFavorite: (id: string) => void;
+  toggleFavorite: (id: string, isFav: boolean) => void;
 };
 
 const ProjectTable: React.FC<ProjectTableProps> = ({ projects, toggleFavorite }) => {

@@ -8,7 +8,7 @@ import { ClickableCard } from '@/styles/card';
 
 type ProjectCardProps = {
   project: Project;
-  toggleFavorite: (id: string) => void;
+  toggleFavorite: () => void;
 };
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, toggleFavorite }) => {
@@ -27,7 +27,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, toggleFavorite }) =>
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
-              toggleFavorite(project.id);
+              toggleFavorite();
             }}
           >
             {project.favorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
