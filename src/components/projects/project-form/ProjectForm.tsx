@@ -13,7 +13,8 @@ const ProjectForm: React.FC<{
   onSubmit: (projectData: ProjectCreate | ProjectUpdate) => Promise<void>;
   onBackBtnClick?: () => void;
   submitButtonText: string;
-}> = ({ project, onSubmit, submitButtonText, onBackBtnClick }) => {
+  isAsyncSubmitting?: boolean;
+}> = ({ project, onSubmit, submitButtonText, isAsyncSubmitting, onBackBtnClick }) => {
   const {
     control,
     formState: { isValid, isDirty, isSubmitting },
@@ -94,9 +95,9 @@ const ProjectForm: React.FC<{
             variant="contained"
             color="primary"
             type="submit"
-            disabled={!isValid || !isDirty || isSubmitting}
+            disabled={!isValid || !isDirty || isSubmitting || isAsyncSubmitting}
           >
-            {isSubmitting ? 'submitting...' : submitButtonText}
+            {submitButtonText}
           </Button>
           {onBackBtnClick && (
             <Button

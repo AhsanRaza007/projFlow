@@ -1,5 +1,5 @@
 'use client';
-    
+
     import React, { useEffect, useState } from 'react';
     import {
       Box,
@@ -18,41 +18,44 @@
     import Sidebar from './Sidebar';
     import useProjectStore from '@/stores/projects.store';
     import Link from 'next/link';
-    
+
     const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       const [mobileOpen, setMobileOpen] = useState(false);
       const theme = useTheme();
       const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
       const appName = 'ProjectFlow';
-    
+
       const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
       };
 
       const fetchFavorites = useProjectStore((state) => state.fetchFavorites);
-      const error = useProjectStore((state) => state.error);
-      const resetError = useProjectStore((state) => state.resetError);
+      const fetchProjects = useProjectStore((state) => state.fetchProjects);
+      const resetFavoritesError = useProjectStore((state) => state.resetFavoritesError);
+      const favoritesError = useProjectStore((state) => state.favoritesError);
+    //   const favoritesLoading = useProjectStore((state) => state.favoritesLoading);
+
       const [snackbarOpen, setSnackbarOpen] = useState(false);
-    
-    
-      useEffect(() => {
-        if (error) {
-          setSnackbarOpen(true);
-        }
-      }, [error]);
 
       useEffect(() => {
+        if (favoritesError) {
+          setSnackbarOpen(true);
+        }
+      }, [favoritesError]);
+
+      useEffect(() => {
+        fetchProjects();
         fetchFavorites();
-      }, [fetchFavorites]);
-    
+      }, [fetchFavorites, fetchProjects]);
+
       const handleCloseSnackbar = (event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
           return;
         }
         setSnackbarOpen(false);
-        resetError();
+        resetFavoritesError();
       };
-    
+
       return (
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
@@ -109,7 +112,7 @@
           >
             {children}
           </Box>
-    
+
           <Snackbar
             open={snackbarOpen}
             autoHideDuration={5000}
@@ -117,11 +120,11 @@
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           >
             <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
-              {error}
+              {favoritesError}
             </Alert>
           </Snackbar>
         </Box>
       );
     };
-    
+
     export default Layout;
